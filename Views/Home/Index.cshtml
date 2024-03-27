@@ -1,0 +1,45 @@
+﻿@model string
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>The Breadpit Login</title>
+
+        <!-- Use bootstrap stylesheet -->
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+
+    </head>
+    <body>
+        <!-- Link naar de index pagina op iedere pagina -->
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+                
+            </a>
+        </header>
+        <!-- Uitleg omtrendt de webpagina -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                <h3 class="text-center">Welcome to The Breadpit<br /><b>@Model</b></h3>
+                    <p class="text-center">
+                        Below you'll find our menu.<br/>
+                        If you want to place an order, please log in.
+                    </p>
+                    <p class="text-center">Click the button below to log in or register a new account.</p>
+                    <!-- Button naar de login pagina -->
+                    <div class="text-center">
+                        <a class="btn btn-primary btn-lg" role="button" asp-action="Login">Login / Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Toekomstig Menu -->
+        <!-- Toekomstig bestelling samenvatting -->
+    </body>
+</html>

@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gebruiker Centrale</title>
+        <!-- Use bootstrap stylesheet -->
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+    </head>
+    <body>
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+            </a>
+        </header>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h3 class="text-center">Welcome user</h3>
+                    <p class="text-center">
+                        Below you will find the various options you can use as user.
+                    </p><br />
+
+                    <!-- Button to the UserOrder pagina -->
+                    <div class="text-center">
+                        <a class="btn btn-primary btn-lg" role="button" asp-action="UserOrder">Order from our menu</a>
+                    </div><br />
+                    <!-- Button to the UserViewOrder pagina -->
+                    <div class="text-center">
+                        <a class="btn btn-primary btn-lg" role="button" asp-action="UserViewOrder">View you're orders'</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future stuff -->
+
+    </body>
+</html>

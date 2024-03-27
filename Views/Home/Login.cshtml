@@ -1,0 +1,65 @@
+﻿@model The_Breadpit.Models.AccountLoginResponse // Heeft deze view acces aan de klasse
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login / Registreer</title>
+        <!-- Use bootstrap stylesheet -->
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+    </head>
+    <body>
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+            </a>
+        </header>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Een paragraaf over hoe u moet inloggen. -->
+                <div class="col-md-8">
+                    <p class="text-center">
+                        Please use you're account's' e-mail and password to login.
+                    </p>
+                </div>
+                <!-- Link om zich te registreren met de registreer pagina -->
+                <div class="col-md-8 text-center">
+                    <p>
+                        If you currently don't own a account you can
+                        <a asp-action="Register">registrer here.</a>
+                    </p>
+                </div>
+                <!-- Inlog form -->
+                <div class="col-md-8">
+                    <form class="text-center" asp-controller="Home" asp-action="Login" method="post">
+                        <div asp-validation-summary="All"></div>
+                        <div>
+                            <!-- Deze input wordt opgeslagen in het Username parameter van het AccountResponse model -->
+                            <label asp-for="Username">You're username:</label><br />
+                            <input class="form-control" asp-for="Username" />
+                        </div><br />
+                        <div>
+                            <!-- Deze input wordt opgeslagen in het Password parameter van het AccountResponse model -->
+                            <label asp-for="Password">You're password:</label><br />
+                            <input class="form-control" asp-for="Password" />
+                        </div><br />
+                        <div>
+                            <button class="btn btn-primary" type="submit">Login</button>
+                        </div> <br />
+                    </form>
+                </div>
+
+                <!-- Tijdelijke link om naar de admin page te gaan -->
+                <p>Temporary</p>
+                <a class="btn btn-primary" asp-controller="Account" asp-action="Admin">Admin</a><br />
+               
+                <!-- Tijdelijke link om naar de user page te gaan -->
+                <p>Temporary</p>
+                <a class="btn btn-primary" asp-controller="Account" asp-action="User">User</a><br />
+            </div>
+        </div>
+    </body>
+</html>
+

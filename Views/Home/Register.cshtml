@@ -1,0 +1,53 @@
+﻿@model The_Breadpit.Models.AccountRegisterResponse // Heeft deze view acces aan de klasse
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registreer</title>
+    <!-- Use bootstrap stylesheet -->
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+</head>
+    <body>
+        <!-- Link naar de index pagina op iedere pagina -->
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+            </a>
+        </header>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Link om zich te in te loggen met de login pagina -->
+                <div class="col-md-8 text-center">
+                    <p>
+                        If you already own a account you can
+                        <a asp-action="Login">log in here.</a>
+                    </p>
+                </div>
+                <!-- Registreer form -->
+                <div class="col-md-8">
+                    <form class="text-center" asp-controller="Home" asp-action="Register" method="post">
+                         <div asp-validation-summary="All"></div>
+                        <div>
+                            <label asp-for="Username">You're Username:</label><br />
+                            <input class="form-control" asp-for="Username" />
+                        </div><br />
+                        <div>
+                            <label asp-for="Email">You're e-mail:</label><br />
+                            <input class="form-control" asp-for="Email" />
+                        </div><br />
+                        <div>
+                            <label asp-for="Password">You're password:</label><br />
+                            <input class="form-control" asp-for="Password" />
+                        </div><br />
+                        <div>
+                            <button class="btn btn-primary" type="submit">Register</button>
+                        </div> <br />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
