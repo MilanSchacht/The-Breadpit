@@ -1,24 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection;
+using The_Breadpit.Data;
 using The_Breadpit.Models;
 
 namespace The_Breadpit.Controllers
 {
     public class HomeController : Controller
     {
-        //TODO NEXT: 08 -> 05/06/07
-
-        // TODO: viewbag test
-        //ViewBag.mail = "";
-        //ViewBag.password = "";
+        private BreadPitContext context = new BreadPitContext();
 
         public IActionResult Index()
         {
-            int hour = DateTime.Now.Hour;
-            int minute = DateTime.Now.Minute;
-            string viewModel = hour + ":" + minute.ToString("00");
-            return View("Index",viewModel);
+            // Retrieve product data from the database
+            ICollection<Product> products = context.Products
+                .OrderBy(p => p.Category)
+                .ThenBy(p => p.Price)
+                .ThenBy(p => p.ProductName)
+                .ToList();
+            return View("Index", products);
         }
 
         [HttpGet]
@@ -34,7 +34,7 @@ namespace The_Breadpit.Controllers
             if (ModelState.IsValid)
             {
                 //===============-|- CHANGE -|-===============
-                // Give the account login data in a database
+                // Give the account login data in a local storage
                 AccountRepository.AddLogedinAccount(account);
 
                 // Temp to admin
@@ -62,10 +62,9 @@ namespace The_Breadpit.Controllers
             // Store account login while site is running
             if (ModelState.IsValid)
             {
-                // Give the account login data in a database
-                AccountRepository.AddRegisteredAccount(account);
-
                 //===============-|- CHANGE -|-===============
+                // Give the account login data in a local storage
+                AccountRepository.AddRegisteredAccount(account);
                 // Temp to user
                 return RedirectToAction("User", "Account");
                 //============================================

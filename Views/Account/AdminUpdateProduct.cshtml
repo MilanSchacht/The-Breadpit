@@ -1,0 +1,108 @@
+﻿@model ICollection<Product>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Product beheer</title>
+        <!-- Use bootstrap stylesheet -->
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+    </head>
+    <body>
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+            </a>
+        </header>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+
+                    <p class="text-center">
+                        You can use this page to add, remove or edit a product.<br />
+                        (Editing the product includes price changes)
+                    </p><br />
+
+                    <!-- Form to edit a product -->
+                    <form method="post" class="text-center">
+
+                        <!-- Table displaying current product data -->
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var product in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" class="productCheckbox" name="selectedProducts" value="@product.Id"></td>
+                                            <td>@product.Category</td> <!-- Assuming Product has a Category property -->
+                                            <td>@product.ProductName</td>
+                                            <td>@product.Price</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4">No products available</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table><br />
+
+                        <div>
+                            <label for="Price">Product Price:</label><br />
+                            <input type="number" id="Price" name="Price" value="0">
+                        </div><br />
+                        <div>
+                            <button type="submit" formaction="@Url.Action("AdminEditProduct", "Account")">Edit selected product(s)</button> 
+                        </div><br />
+                        <div>
+                            <button type="submit" formaction="@Url.Action("AdminDeleteProduct", "Account")">Delete selected product(s)</button>
+                        </div><br />  
+
+                    </form>
+
+                    <!-- Form to add a product -->
+                    <form asp-action="AdminAddProduct" asp-controller="Account" method="post" class="text-center">
+                        <div>
+                            <label for="Category">Product Category:</label><br />
+                            <select id="Category" name="Category" required>
+                                <option value="" disabled selected>Select a different category</option>
+                                @foreach (var category in Enum.GetValues(typeof(Category)))
+                                {
+                                    <option value="@category">@category</option>
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <label for="ProductName">Product Name:</label><br />
+                            <input type="text" id="ProductName" name="ProductName" required> <br />
+                        </div>
+                        <div>
+                            <label for="Price">Product Price:</label><br />
+                            <input type="number" id="Price" name="Price" required> <br />
+                        </div><br />
+                        <div>
+                            <button type="submit">Add Product</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+
