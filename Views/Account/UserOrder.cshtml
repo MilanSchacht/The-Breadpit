@@ -23,6 +23,9 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
+                    <a asp-action="User" class="text-decoration-none">
+                        <h3>User page</h3>
+                    </a>
                     <h3 class="text-center">Order page<br /></h3>
                     <p class="text-center">
                         Below you'll find our menu.<br/>
@@ -30,42 +33,49 @@
                     </p>
 
                     <!-- Table displaying current Menu -->
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th colspan="3" class="text-center"><strong>Menu</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null && Model.Any())
-                            {
-                                var categoryGroups = Model.OrderBy(p => p.Category)
-                                .ThenBy(p => p.Price).ThenBy(p => p.ProductName)
-                                .GroupBy(p => p.Category);
-
-                                foreach (var group in categoryGroups)
+                <form asp-action="UserHasOrdered" asp-controller="Account" method="post" class="text-center">
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th colspan="3" class="text-center"><strong>Menu</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
                                 {
-                                    <tr>
-                                        <td colspan="3" style="color:red">@group.Key</td>
-                                    </tr>
+                                    var categoryGroups = Model.OrderBy(p => p.Category)
+                                    .ThenBy(p => p.Price).ThenBy(p => p.ProductName)
+                                    .GroupBy(p => p.Category);
 
-                                    foreach (var product in group)
+                                    foreach (var group in categoryGroups)
                                     {
                                         <tr>
-                                            <td>@product.ProductName</td>
-                                            <td>€@product.Price</td>
+                                            <td colspan="3" style="color:red">@group.Key</td>
                                         </tr>
+
+                                        foreach (var product in group)
+                                        {
+                                            <tr>
+                                                <td>@product.ProductName</td>
+                                                <td>€@product.Price</td>
+                                                <td>
+                                                    <input type="number" id="@($"quantity_{product.Id}")" name="@($"quantity_{product.Id}")" min="0" value="0" />
+                                                </td>
+                                            </tr>
+                                        }
                                     }
                                 }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="4">No products available</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table><br />
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="3">No products available</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table><br />
+
+                        <button type="submit" class="btn btn-primary">Order</button>
+                    </form>
 
                 </div>
             </div>

@@ -1,15 +1,103 @@
-﻿@{
+﻿@model ICollection<Account>
+@{
     Layout = null;
 }
 <!DOCTYPE html>
 <html>
     <head>
-        <title>User Managment</title>
+        <meta name="viewport" content="width=device-width" />
+        <title>User beheer</title>
         <!-- Use bootstrap stylesheet -->
         <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
     </head>
     <body>
-        <!-- Future stuff -->
-        <p>Hier zal in de toekomst de Approve User pagina komen.</p>
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+            </a>
+        </header>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="text-center">
+                        <a asp-action="Admin" class="text-decoration-none">
+                            <h3>Admin page</h3>
+                        </a><br />
+                    </div>
+
+                    <p class="text-center">
+                        You can use this page to manage users:<<br />
+                        Approve/reject users and change roles of the accounts. <br />
+                        When a user's status is set to rejected it is immediatly deleted.
+                    </p><br />
+
+                    <!-- Form to edit a product -->
+                    <form method="post" class="text-center">
+
+                        <!-- Table displaying current product data -->
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var account in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" class="productCheckbox" name="selectedAccounts" value="@account.Id"></td>
+                                            <td>@account.Username</td>
+                                            <td>@account.Role</td>
+                                            <td>@account.AccountStatus</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4">No accounts to manage</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table><br />
+
+                        <div>
+                            <label for="Role">Account role:</label><br />
+                            <select id="Role" name="Role">
+                                <option value="" disabled selected>Select a different Role</option>
+                                @foreach (var role in Enum.GetValues(typeof(AccountRole)))
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            </select>
+                        </div><br />
+                        <div>
+                            <button type="submit" formaction="@Url.Action("AdminChangeAccountRole", "Account")">Change selected account(s) roles</button> 
+                        </div><br />
+
+                        <div>
+                            <label for="AccountStatus">Account status:</label><br />
+                            <select id="AccountStatus" name="AccountStatus">
+                                <option value="" disabled selected>Select a different AccountStatus</option>
+                                @foreach (var status in Enum.GetValues(typeof(AccountStatus)))
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </select>
+                        </div><br />
+                        <div>
+                            <button type="submit" formaction="@Url.Action("AdminChangeAccountStatus", "Account")">Change selected account(s) status</button>
+                        </div><br />  
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

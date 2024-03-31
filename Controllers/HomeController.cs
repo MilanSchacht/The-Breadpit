@@ -144,10 +144,13 @@ namespace The_Breadpit.Controllers
             {
                 Username = account.Username,
                 Email = account.Email,
-                Password = account.Password,
-                Role = AccountRole.user
+                Password = account.Password
             };
             context.Accounts.Add(newAccount);
+            
+            Customer newCustomer = new Customer()
+            { Account = newAccount };
+            context.Customers.Add(newCustomer);
             context.SaveChanges();
 
             // Give the account login data in a local storage

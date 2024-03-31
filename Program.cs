@@ -21,7 +21,8 @@ if (dbAdminAccounts == null)
         Username = "admin",
         Email = "admin@admin.be",
         Password = "Admin123",
-        Role = AccountRole.admin
+        Role = AccountRole.admin,
+        AccountStatus = AccountStatus.accepted
     };
 
     context.Accounts.Add(adminAccount);
@@ -35,7 +36,8 @@ if (dbManagerAccounts == null)
         Username = "manager",
         Email = "manager@manager.be",
         Password = "Manager123",
-        Role = AccountRole.manager
+        Role = AccountRole.manager,
+        AccountStatus = AccountStatus.accepted
     };
 
     context.Accounts.Add(managerAccount);
