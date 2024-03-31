@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Reflection;
@@ -15,71 +16,86 @@ namespace The_Breadpit.Controllers
 
         public IActionResult Admin()
         {
-            var account = AccountRepository.LoginResponses.First();
-            AccountRepository.ClearLogedinAccount();
-
-            if (account != null)
+            try
             {
-                // Notify via console
-                Console.WriteLine($"\r\n======\r\nNOTICE\r\n======\r\n\r\nA admin account logged in:\r\n"+account.Username+"\r\n");
-            }
-            else
-            {
-                // Notify via console
-                Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nError: this wasnt supposed to happen.\r\n");
-            }
+                var usedAccount = AccountRepository.AccountResponses.First();
 
-            return View();
+                if (usedAccount != null) // if a user has logged in.
+                {
+                    if (usedAccount.Role != AccountRole.admin)
+                        return RedirectToAction("Login", "Home");
+                    return View("Admin", usedAccount.Username);
+                }
+                else
+                {
+                    // Notify via console
+                    Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nError: this wasnt supposed to happen.\r\n");
+
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public IActionResult Manager()
         {
-            var account = AccountRepository.LoginResponses.First();
-            AccountRepository.ClearLogedinAccount();
-
-            if (account != null)
+            try
             {
-                // Notify via console
-                Console.WriteLine($"\r\n======\r\nNOTICE\r\n======\r\n\r\nA admin account logged in:\r\n" + account.Username + "\r\n");
-            }
-            else
-            {
-                // Notify via console
-                Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nError: this wasnt supposed to happen.\r\n");
-            }
+                var usedAccount = AccountRepository.AccountResponses.First();
 
-            return View();
+                if (usedAccount != null) // if a user has logged in.
+                {
+                    if (usedAccount.Role != AccountRole.manager)
+                        return RedirectToAction("Login", "Home");
+                    return View("Manager", usedAccount.Username);
+                }
+                else
+                {
+                    // Notify via console
+                    Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nError: this wasnt supposed to happen.\r\n");
+
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public IActionResult User()
         {
-            if (AccountRepository.RegisterResponses.First() != null) // if a new user regesters himself.
+            try
             {
-                var account = AccountRepository.RegisterResponses.First();
-                AccountRepository.ClearRegisteredAccount();
+                var usedAccount = AccountRepository.AccountResponses.First();
 
-                // Notify via console
-                Console.WriteLine($"\r\n======\r\nNOTICE\r\n======\r\n\r\nA user account logged in for the first time:\r\n" + account.Username + "\r\n");
+                if (usedAccount != null) // if a user has logged in / registered.
+                {
+                    if (usedAccount.Role != AccountRole.user)
+                        return RedirectToAction("Login", "Home");
+                    return View("User", usedAccount.Username);
+                }
+                else
+                {
+                    // Notify via console
+                    Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nError: this wasnt supposed to happen.\r\n");
 
-                return View();
+                    return RedirectToAction("Error", "Home");
+                }
             }
-            else if (AccountRepository.LoginResponses.First() != null) // if a user logs in.
+            catch
             {
-                var account = AccountRepository.LoginResponses.First();
-                AccountRepository.ClearLogedinAccount();
-
-                // Notify via console
-                Console.WriteLine($"\r\n======\r\nNOTICE\r\n======\r\n\r\nA user account has logged in:\r\n" + account.Username + "\r\n");
-
-                return View();
+                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                // Notify via console
-                Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nError: this wasnt supposed to happen.\r\n");
+        }
 
-                return RedirectToAction("Error", "Home");
-            }
+        public IActionResult Logout()
+        {
+            AccountRepository.ClearAccount();
+            return RedirectToAction("Index", "Home");
         }
 
         /*Admin pages (Has acces to all pages from here)*/
@@ -175,7 +191,14 @@ namespace The_Breadpit.Controllers
         /*User pages (Has acces to all pages from here)*/
         public IActionResult UserOrder()
         {
-            return View();
+            // Retrieve product data from the database
+            ICollection<Product> products = context.Products
+                .OrderBy(p => p.Category)
+                .ThenBy(p => p.Price)
+                .ThenBy(p => p.ProductName)
+                .ToList();
+
+            return View(products);
         }
         public IActionResult UserViewOrder()
         {

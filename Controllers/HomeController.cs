@@ -24,58 +24,136 @@ namespace The_Breadpit.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            try
+            {
+                var usedAccount = AccountRepository.AccountResponses.First();
+                if (usedAccount.Role == AccountRole.admin)
+                    return RedirectToAction("Admin", "Account");
+                else if (usedAccount.Role == AccountRole.manager)
+                    return RedirectToAction("Manager", "Account");
+                else if (usedAccount.Role == AccountRole.user)
+                    return RedirectToAction("User", "Account");
+                else
+                    AccountRepository.ClearAccount();
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         [HttpPost]
         public IActionResult Login(AccountLoginResponse account)
         {
-            // Store account login while site is running
             if (ModelState.IsValid)
             {
-                //===============-|- CHANGE -|-===============
-                // Give the account login data in a local storage
-                AccountRepository.AddLogedinAccount(account);
+                // Check for the existence of the account.
+                var existingAccounts = context.Accounts;
+                if (existingAccounts != null)
+                {
+                    foreach (Account existingAccount in existingAccounts)
+                    {
+                        // Checking if the account used in the form is in the database
+                        // and redirecting the account to the correct account page
+                        if (existingAccount.Username == account.Username &&
+                            existingAccount.Password == account.Password
+                            && existingAccount.Role == AccountRole.admin)
+                        {
+                            // Give the account login data in a local storage
+                            AccountRepository.AddAccount(existingAccount);
 
-                // Temp to admin
-                return RedirectToAction("Admin", "Account");
-                //============================================
+                            return RedirectToAction("Admin", "Account");
+                        }
+                        else if (existingAccount.Username == account.Username &&
+                            existingAccount.Password == account.Password
+                            && existingAccount.Role == AccountRole.manager)
+                        {
+                            // Give the account login data in a local storage
+                            AccountRepository.AddAccount(existingAccount);
+
+                            return RedirectToAction("Manager", "Account");
+                        }
+                        else if (existingAccount.Username == account.Username &&
+                            existingAccount.Password == account.Password
+                            && existingAccount.Role == AccountRole.user)
+                        {
+                            // Give the account login data in a local storage
+                            AccountRepository.AddAccount(existingAccount);
+
+                            return RedirectToAction("User", "Account");
+                        }
+                    }
+                }
             }
-            else
-            {
-                // Notify via console
-                Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nFailed to log account in.\r\n");
-                
-                return View();
-            }
+            // Display error
+            ModelState.AddModelError("", "Invalid username or password.");
+            return View();
         }
 
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            try
+            {
+                var usedAccount = AccountRepository.AccountResponses.First();
+                if (usedAccount.Role == AccountRole.admin)
+                    return RedirectToAction("Admin", "Account");
+                else if (usedAccount.Role == AccountRole.manager)
+                    return RedirectToAction("Manager", "Account");
+                else if (usedAccount.Role == AccountRole.user)
+                    return RedirectToAction("User", "Account");
+                else
+                    AccountRepository.ClearAccount();
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         [HttpPost]
         public IActionResult Register(AccountRegisterResponse account)
         {
-            // Store account login while site is running
             if (ModelState.IsValid)
             {
-                //===============-|- CHANGE -|-===============
-                // Give the account login data in a local storage
-                AccountRepository.AddRegisteredAccount(account);
-                // Temp to user
-                return RedirectToAction("User", "Account");
-                //============================================
-            }
-            else
+                // Check for the existence of the account.
+                var existingAccounts = context.Accounts;
+                if (existingAccounts != null)
+                {
+                    foreach (Account existingAccount in existingAccounts)
+                    {
+                        // Checking if the account used in the form is in the database
+                        // and redirecting the account to the correct account page
+                        if (existingAccount.Username == account.Username &&
+                            existingAccount.Password == account.Password
+                            && existingAccount.Email == account.Email)
+                        {
+                            // Display error
+                            ModelState.AddModelError("", "Invalid username, email or password.");
+                            return View();
+                        }
+                    }
+                }
+            }            
+            // Make a new account and store it in the database.
+            Account newAccount = new Account()
             {
-                // Notify via console
-                Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nFailed to register account.\r\n");
-                
-                return View();
-            }
+                Username = account.Username,
+                Email = account.Email,
+                Password = account.Password,
+                Role = AccountRole.user
+            };
+            context.Accounts.Add(newAccount);
+            context.SaveChanges();
+
+            // Give the account login data in a local storage
+            AccountRepository.AddAccount(newAccount);
+
+            return RedirectToAction("User", "Account");
         }
 
         public IActionResult Privacy()

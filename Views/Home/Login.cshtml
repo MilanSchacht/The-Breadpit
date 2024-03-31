@@ -35,6 +35,7 @@
                 <div class="col-md-8">
                     <form class="text-center" asp-controller="Home" asp-action="Login" method="post">
                         <div asp-validation-summary="All"></div>
+
                         <div>
                             <!-- Deze input wordt opgeslagen in het Username parameter van het AccountResponse model -->
                             <label asp-for="Username">You're username:</label><br />
@@ -50,14 +51,6 @@
                         </div> <br />
                     </form>
                 </div>
-
-                <!-- Tijdelijke link om naar de admin page te gaan -->
-                <p>Temporary</p>
-                <a class="btn btn-primary" asp-controller="Account" asp-action="Admin">Admin</a><br />
-               
-                <!-- Tijdelijke link om naar de user page te gaan -->
-                <p>Temporary</p>
-                <a class="btn btn-primary" asp-controller="Account" asp-action="User">User</a><br />
             </div>
         </div>
     </body>

@@ -16,9 +16,15 @@
                 <h1 class="display-4">The Breadpit</h1>
             </a>
         </header>
+
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
+                    <div class="text-center">
+                        <a asp-action="Admin" class="text-decoration-none">
+                            <h3 class="display-4">Admin page</h3>
+                        </a><br />
+                    </div>
 
                     <p class="text-center">
                         You can use this page to add, remove or edit a product.<br />
@@ -47,7 +53,7 @@
                                             <td><input type="checkbox" class="productCheckbox" name="selectedProducts" value="@product.Id"></td>
                                             <td>@product.Category</td> <!-- Assuming Product has a Category property -->
                                             <td>@product.ProductName</td>
-                                            <td>@product.Price</td>
+                                            <td>€@product.Price</td>
                                         </tr>
                                     }
                                 }

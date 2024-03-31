@@ -1,5 +1,6 @@
 ﻿namespace The_Breadpit.Models
 {
+    public enum AccountRole { user, manager, admin }
     public class Account
     {
         public int Id { get; set; }

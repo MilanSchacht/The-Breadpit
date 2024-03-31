@@ -1,15 +1,74 @@
-﻿@{
+﻿@model ICollection<Product>
+@{
     Layout = null;
 }
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width" />
         <title>Bestelling plaatsen</title>
+
         <!-- Use bootstrap stylesheet -->
         <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+
     </head>
     <body>
-        <!-- Future stuff -->
-        <p>Hier zal in de toekomst de Bestelling plaatsen pagina komen.</p>
+        <!-- Link naar de index pagina op iedere pagina -->
+        <header class="text-center m-2">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                <h1 class="display-4">The Breadpit</h1>
+            </a>
+        </header>
+        <!-- Uitleg omtrendt de webpagina -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h3 class="text-center">Order page<br /></h3>
+                    <p class="text-center">
+                        Below you'll find our menu.<br/>
+                        Press the butons to add to order.
+                    </p>
+
+                    <!-- Table displaying current Menu -->
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th colspan="3" class="text-center"><strong>Menu</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                var categoryGroups = Model.OrderBy(p => p.Category)
+                                .ThenBy(p => p.Price).ThenBy(p => p.ProductName)
+                                .GroupBy(p => p.Category);
+
+                                foreach (var group in categoryGroups)
+                                {
+                                    <tr>
+                                        <td colspan="3" style="color:red">@group.Key</td>
+                                    </tr>
+
+                                    foreach (var product in group)
+                                    {
+                                        <tr>
+                                            <td>@product.ProductName</td>
+                                            <td>€@product.Price</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4">No products available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table><br />
+
+                </div>
+            </div>
+        </div>
     </body>
 </html>

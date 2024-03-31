@@ -2,30 +2,15 @@
 {
     public class AccountRepository
     {
-        private static List<AccountLoginResponse> loginResponses = new();
-        public static IEnumerable<AccountLoginResponse> LoginResponses => loginResponses;
-        public static void AddLogedinAccount(AccountLoginResponse response)
+        private static List<Account> accountResponses = new();
+        public static IEnumerable<Account> AccountResponses => accountResponses;
+        public static void AddAccount(Account response)
         {
-            // For debugging
-            Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nA new account has logged in:\r\nUsername = " + response.Username + "\r\n");
-            loginResponses.Add(response);
+            accountResponses.Add(response);
         }
-        public static void ClearLogedinAccount()   
+        public static void ClearAccount()   
         {
-            loginResponses.Clear();
-        }
-
-        private static List<AccountRegisterResponse> registerResponses = new();
-        public static IEnumerable<AccountRegisterResponse> RegisterResponses => registerResponses;
-        public static void AddRegisteredAccount(AccountRegisterResponse response)
-        {
-            // For debugging
-            Console.WriteLine("\r\n======\r\nNOTICE\r\n======\r\n\r\nA new account registered:\r\nUsername = " + response.Username + "\r\n");
-            registerResponses.Add(response);
-        }
-        public static void ClearRegisteredAccount()
-        {
-            registerResponses.Clear();
+            accountResponses.Clear();
         }
     }
 }
